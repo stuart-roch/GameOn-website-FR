@@ -131,7 +131,22 @@ main {
 }
 /* Modal form */
 
-.button {
+.msg-confirmation{
+  display:none;
+  color:#fff;
+  font-size: 30px;
+  height: 80%;
+  font-size: 36px;
+  text-align: center;
+}
+.msg-confirmation.form-submitted{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+.button-close {
+  display:none;
   background: #fe142f;
   margin-top: 0.5em;
   padding: 1em;
@@ -140,8 +155,10 @@ main {
   cursor: pointer;
   font-size: 16px;
 }
-
-.button:hover {
+.button-close.form-submitted{
+  display:block;
+}
+.button-close:hover {
   background: #3876ac;
 }
 
@@ -179,6 +196,14 @@ main {
 .modal-body {
   padding: 15px 8%;
   margin: 15px auto;
+}
+
+.modal-body.form-submitted{
+  display: flex;
+  flex-direction: column;
+  height: 800px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 label {
@@ -508,6 +533,7 @@ input[data-error]::after {
 }
 @media screen and (max-width: 767.98px) {
 
+  
   .header-logo{
     align-self: flex-start;
   }
@@ -620,10 +646,10 @@ input[data-error]::after {
 @media screen and (max-width:539.98px) {
   
   .header-logo{
-    width: 40%;
+    width: 50%;
   }
   .main-navbar{
-    width: 60%;
+    width: 50%;
   }
   .topnav img{
     width: 100%;
