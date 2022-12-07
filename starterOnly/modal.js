@@ -3,6 +3,7 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const modalBtnClose = document.querySelector(".close");
+const form = document.querySelector("form");
 
 // DOM Elements from form
 const firstName=document.querySelector("#first-name");
@@ -14,21 +15,32 @@ const listLocation=document.querySelectorAll('input[name="location"]');
 const terms=document.querySelector("#terms");
 const btnSubmit=document.querySelector(".btn-submit");
 
+let fields=[
+  {input:firstName, index: 0,regex:/^[a-zA-Z]{2,}/,msgError:"Veuillez entrer 2 caractères ou plus pour le champ du nom.",isValid:false},
+  {input:lastName, index:1, regex:/^[a-zA-Z]{2,}/,msgError:"Veuillez entrer 2 caractères ou plus pour le champ du nom.",isValid:false},
+  {input:email, index:2,regex:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,msgError:"Veuillez entrer une adresse mail valide.",isValid:false},
+  {input:birthDate, index:3,regex:/^(19[0-9]{2}|202[0-3]|20[0-1][0-9])[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/
+  ,msgError:"Veuillez entrer une date de naissance valide.",isValid:false},
+  {input:numberTournaments, index:4,regex:/^[0-9]{1,}/,msgError:"Veuillez entrer une valeur numérique.",isValid:false}
+  ];
+  
 function editNav() {
   var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
+  /*if (x.className === "topnav") {
     x.className += " responsive";
   } else {
     x.className = "topnav";
-  }
+  }*/
+  x.classList.toggle("responsive");
 }
 
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
-  document.querySelector(".topnav").style.display="none";
-  document.querySelector(".hero-section").style.display="none";
-  document.querySelector("footer").style.display="none";
+  document.querySelector(".topnav").classList.toggle("modal-open");
+  document.querySelector(".hero-section").classList.toggle("modal-open");
+  document.querySelector(".footer").classList.toggle("modal-open");
+  document.querySelector("main").classList.toggle("modal-open");
 }
 
 // close modal form
@@ -38,13 +50,14 @@ function closeModal(){
     formData[i].removeAttribute("data-error-visible");
   }
   modalbg.style.display = "none";
-  document.querySelector(".topnav").style.display="flex";
-  if(document.querySelector("body").clientWidth<=800){
-    document.querySelector(".hero-section").style.display="block";
-  }else{
-    document.querySelector(".hero-section").style.display="grid";
-  }
-  document.querySelector("footer").style.display="block";
+  document.querySelector(".topnav").classList.toggle("modal-open");
+  document.querySelector(".hero-section").classList.toggle("modal-open");
+  document.querySelector(".footer").classList.toggle("modal-open");
+  document.querySelector("main").classList.toggle("modal-open");
+
+  /*document.querySelector(".topnav").removeAttribute("style");
+  document.querySelector(".hero-section").removeAttribute("style");
+  document.querySelector("footer").removeAttribute("style");*/
 }
 
 function firstNameIsValid(){
@@ -144,7 +157,7 @@ function termsIsValid(){
 // test if all input are valid
 function modalIsValid(){
   let cpt=0;
-  if(firstNameIsValid()){
+  /*if(firstNameIsValid()){
     cpt++;
   }
   if(lastNameIsValid()){
@@ -158,21 +171,44 @@ function modalIsValid(){
   }
   if(numberTournamentsIsValid()){
     cpt++;
-  }
+  }*/
+  fields.forEach(field => {if(field.regex.test(field.input.value)){
+    field.isValid=true;
+    cpt++;
+  }})
   if(locationIsValid()){
     cpt++;
   }
   if(termsIsValid()){
     cpt++;
   }
-  return cpt==7;
+  return cpt===7;
+}
+
+function displayErrorMsg(){
+  fields.forEach(field => {if(!field.isValid){
+    formData[field.index].setAttribute("data-error",field.msgError);
+    formData[field.index].setAttribute("data-error-visible","true");
+  }else{
+    formData[field.index].removeAttribute("data-error");
+    formData[field.index].removeAttribute("data-error-visible");
+  }})
+}
+function displayConfirmationMsg(){
+  document.querySelector(".modal-body").innerHTML="<p> Merci pour votre inscription ! </p>";
+  document.querySelector(".modal-body").style.textAlign="center";
 }
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 modalBtnClose.addEventListener("click",closeModal);
 
-btnSubmit.addEventListener("click",function(e){
-  if(!modalIsValid()){
-    e.preventDefault();
+form.addEventListener("submit",function(e){
+  e.preventDefault();
+  if(modalIsValid()){
+    displayConfirmationMsg();
+  }else{
+    displayErrorMsg();
   }});
-
+/*btnSubmit.addEventListener("click",function(e){
+  e.preventDefault();
+})*/
