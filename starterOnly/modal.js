@@ -24,13 +24,9 @@ let fields=[
   {input:numberTournaments, index:4,regex:/^[0-9]{1,}/,msgError:"Veuillez entrer une valeur numérique.",isValid:false}
   ];
   
+ 
 function editNav() {
   var x = document.getElementById("myTopnav");
-  /*if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }*/
   x.classList.toggle("responsive");
 }
 
@@ -54,6 +50,7 @@ function closeModal(){
   document.querySelector(".hero-section").classList.toggle("modal-open");
   document.querySelector(".footer").classList.toggle("modal-open");
   document.querySelector("main").classList.toggle("modal-open");
+  form.reset();
 }
 
 
@@ -114,6 +111,7 @@ function displayErrorMsg(){
     formData[field.index].removeAttribute("data-error-visible");
   }})
 }
+
 function displayConfirmationMsg(){
   document.querySelector(".msg-confirmation").classList.toggle("form-submitted");
   document.querySelector(".button-close").classList.toggle("form-submitted");
@@ -127,6 +125,18 @@ function closeConfirmationMsg(){
   form.style.display="block";
   document.querySelector(".modal-body").classList.toggle("form-submitted");
   closeModal();
+  
+}
+
+function displayFormDataSubmitted(e){
+  return "Données envoyées par le formulaire : \nPrénom : " + e.target.elements["first-name"].value
+  + "\nNom : " + e.target.elements["last-name"].value 
+  + "\nEmail : " + e.target.elements["email"].value
+  + "\nDate de naissance : " + e.target.elements["birthdate"].value
+  + "\nNombre de tournois participés : " + e.target.elements["number-tournaments"].value
+  + "\nLieu prochain tournoi : " + e.target.elements["location"].value 
+  + "\nTerms : " + e.target.elements["terms"].value
+  + "\nNewsletter : " + e.target.elements["newsletter"].value
 }
 
 // launch modal event
@@ -137,6 +147,7 @@ form.addEventListener("submit",function(e){
   e.preventDefault();
   if(modalIsValid()){
     displayConfirmationMsg();
+    console.log(displayFormDataSubmitted(e))
   }else{
     displayErrorMsg();
   }});
