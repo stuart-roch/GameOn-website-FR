@@ -516,6 +516,7 @@ input {
     padding-left: 2vw;
     padding-right: 2vw;
     margin: 25px 10px 15px 20px;
+    align-items: unset;
   }
   .topnav a {display: none;}
   .topnav a.icon {
@@ -607,16 +608,13 @@ input {
     width: 50%;
   }
   .topnav img{
-    width: 100%;
+    width: 150px;
   }
   .topnav a.icon, .topnav.responsive .icon{
     font-size: 20px;
   }
   .topnav.responsive a{
     font-size: 16px;
-  }
-  .topnav.modal-open{
-    margin:25px 10px 15px;
   }
   main.modal-open{
     margin:0;

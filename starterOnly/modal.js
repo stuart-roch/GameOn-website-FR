@@ -5,7 +5,7 @@ const formData = document.querySelectorAll(".formData");
 const modalClose = document.querySelector(".close");
 const form = document.querySelector("form");
 
-// DOM Elements from form
+// DOM Elements du formulaire
 const firstName=document.querySelector("#first-name");
 const lastName=document.querySelector("#last-name");
 const email=document.querySelector("#email");
@@ -15,6 +15,7 @@ const listLocation=document.querySelectorAll('input[name="location"]');
 const terms=document.querySelector("#terms");
 const btnSubmit=document.querySelector(".btn-submit");
 
+// Liste d'objet modélisant les champs texte du formulaire pour leur validation et leur place dans le formulaire
 let fields=[
   {input:firstName, index: 0,regex:/^[a-zA-Z]{2,}/,msgError:"Veuillez entrer 2 caractères ou plus pour le champ du nom.",isValid:false},
   {input:lastName, index:1, regex:/^[a-zA-Z]{2,}/,msgError:"Veuillez entrer 2 caractères ou plus pour le champ du nom.",isValid:false},
@@ -24,13 +25,16 @@ let fields=[
   {input:numberTournaments, index:4,regex:/^[0-9]{1,}/,msgError:"Veuillez entrer une valeur numérique.",isValid:false}
   ];
   
- 
+// Modifie la class de l'HTMLElement du menu pour modifier son apparence en responsive
 function editNav() {
   var x = document.getElementById("myTopnav");
   x.classList.toggle("responsive");
 }
 
-// launch modal form
+/*
+  Lance le formulaire d'inscription et modifie la class des éléments HTML en arrière plan 
+  quand le formulaire est ouvert
+*/
 function launchModal() {
   modalbg.style.display = "block";
   document.querySelector(".topnav").classList.toggle("modal-open");
@@ -39,7 +43,10 @@ function launchModal() {
   document.querySelector("main").classList.toggle("modal-open");
 }
 
-// close modal form
+/*  
+  Ferme le formulaire d'inscription, reset ses champs, les messages d'erreurs 
+  et modifie la class des éléments HTML en arrière plan quand le formulaire est fermé
+*/
 function closeModal(){
   for (let i=0;i<formData.length;i++){
     formData[i].removeAttribute("data-error");
@@ -53,7 +60,12 @@ function closeModal(){
   form.reset();
 }
 
-
+/*
+  Indique si le champ location vérifie la condition de validation,
+  affiche le message d'erreur s'il ne vérifie pas la condition
+  et le supprime dès que le champ est valide
+  return {boolean}
+*/
 function locationIsValid(){
   let checked=false;
   for (let i=0;i<listLocation.length;i++){
@@ -73,6 +85,12 @@ function locationIsValid(){
   }
 }
 
+/*
+  Indique si le champ terms vérifie la condition de validation,
+  affiche le message d'erreur s'il ne vérifie pas la condition
+  et le supprime dès que le champ est valide
+  return {boolean}
+*/
 function termsIsValid(){
   if(!terms.checked){
     formData[6].setAttribute("data-error","Vous devez vérifier que vous acceptez les termes et conditions.");
@@ -85,23 +103,11 @@ function termsIsValid(){
     return terms.checked;
   }
 }
-// test if all input are valid
-function modalIsValid(){
-  let cpt=0;
-  
-  fields.forEach(field => {if(field.regex.test(field.input.value)){
-    field.isValid=true;
-    cpt++;
-  }})
-  if(locationIsValid()){
-    cpt++;
-  }
-  if(termsIsValid()){
-    cpt++;
-  }
-  return cpt===7;
-}
 
+/* 
+  Affiche les messages d'erreurs des champs textes du formulaire s'ils sont invalides
+  et les supprimes dès qu'ils sont valides
+*/
 function displayErrorMsg(){
   fields.forEach(field => {if(!field.isValid){
     formData[field.index].setAttribute("data-error",field.msgError);
@@ -112,13 +118,40 @@ function displayErrorMsg(){
   }})
 }
 
+/*
+  Indique si les champs du formulaire sont valides
+  et affiche le message d'erreur correspondant à chaque champ en cas d'invalidité
+  return {boolean}
+*/
+function modalIsValid(){
+  let cpt=0; // compteur de champ valide
+  //Vérifie si les champs texte du formulaire sont valides
+  fields.forEach(field => {if(field.regex.test(field.input.value)){
+    field.isValid=true;
+    cpt++;
+  }})
+  displayErrorMsg();
+  if(locationIsValid()){
+    cpt++;
+  }
+  if(termsIsValid()){
+    cpt++;
+  }
+  return cpt===7;
+}
+
+/*
+  Affiche un message de confirmation à la place du formulaire avec un bouton pour le fermer
+*/
 function displayConfirmationMsg(){
   document.querySelector(".msg-confirmation").classList.toggle("form-submitted");
   document.querySelector(".button-close").classList.toggle("form-submitted");
   form.style.display="none";
   document.querySelector(".modal-body").classList.toggle("form-submitted");
 }
-
+/*
+  Ferme le message de confirmation
+*/
 function closeConfirmationMsg(){
   document.querySelector(".msg-confirmation").classList.toggle("form-submitted");
   document.querySelector(".button-close").classList.toggle("form-submitted");
@@ -128,6 +161,11 @@ function closeConfirmationMsg(){
   
 }
 
+/*
+  Crée un message avec les données envoyées par le formulaire
+  param {event} e
+  return {string}
+*/
 function displayFormDataSubmitted(e){
   return "Données envoyées par le formulaire : \nPrénom : " + e.target.elements["first-name"].value
   + "\nNom : " + e.target.elements["last-name"].value 
@@ -139,17 +177,16 @@ function displayFormDataSubmitted(e){
   + "\nNewsletter : " + e.target.elements["newsletter"].value
 }
 
-// launch modal event
+// Evenement de lancement du formulaire
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+// Evenement de fermeture du formulaire
 modalClose.addEventListener("click",closeModal);
-
+// Evenement de vérification des champs du formulaire
 form.addEventListener("submit",function(e){
   e.preventDefault();
   if(modalIsValid()){
     displayConfirmationMsg();
     console.log(displayFormDataSubmitted(e))
-  }else{
-    displayErrorMsg();
   }});
-
+// Evenement de fermeture du message de confirmation
 document.querySelector(".button-close").addEventListener("click",closeConfirmationMsg);
