@@ -129,6 +129,8 @@ function modalIsValid(){
   fields.forEach(field => {if(field.regex.test(field.input.value)){
     field.isValid=true;
     cpt++;
+  }else{
+    field.isValid=false;
   }})
   displayErrorMsg();
   if(locationIsValid()){
@@ -158,7 +160,6 @@ function closeConfirmationMsg(){
   form.style.display="block";
   document.querySelector(".modal-body").classList.toggle("form-submitted");
   closeModal();
-  
 }
 
 /*
