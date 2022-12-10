@@ -58,6 +58,7 @@ function closeModal(){
   document.querySelector(".footer").classList.toggle("modal-open");
   document.querySelector("main").classList.toggle("modal-open");
   form.reset();
+  closeConfirmationMsg();
 }
 
 /*
