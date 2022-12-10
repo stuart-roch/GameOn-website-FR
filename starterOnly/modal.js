@@ -58,7 +58,6 @@ function closeModal(){
   document.querySelector(".footer").classList.toggle("modal-open");
   document.querySelector("main").classList.toggle("modal-open");
   form.reset();
-  closeConfirmationMsg();
 }
 
 /*
@@ -160,6 +159,7 @@ function closeConfirmationMsg(){
   document.querySelector(".button-close").classList.toggle("form-submitted");
   form.style.display="block";
   document.querySelector(".modal-body").classList.toggle("form-submitted");
+  closeModal();
 }
 
 /*
@@ -190,4 +190,4 @@ form.addEventListener("submit",function(e){
     console.log(displayFormDataSubmitted(e))
   }});
 // Evenement de fermeture du message de confirmation
-document.querySelector(".button-close").addEventListener("click",closeModal);
+document.querySelector(".button-close").addEventListener("click",closeConfirmationMsg);
